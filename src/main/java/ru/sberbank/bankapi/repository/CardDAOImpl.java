@@ -2,7 +2,6 @@ package ru.sberbank.bankapi.repository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.sberbank.bankapi.model.Account;
 import ru.sberbank.bankapi.model.Card;
 
 import javax.persistence.EntityManager;
