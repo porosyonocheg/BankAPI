@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class CardServiceImpl implements CardService {
-    private CardRepository cardRepository;
-    private AccountRepository accountRepository;
-    private CardDAOImpl cardDAO;
+    private final CardRepository cardRepository;
+    private final AccountRepository accountRepository;
+    private final CardDAOImpl cardDAO;
 
     public CardServiceImpl(AccountRepository accountRepository, CardRepository cardRepository, CardDAOImpl cardDAO) {
         this.cardRepository = cardRepository;
@@ -28,18 +28,22 @@ public class CardServiceImpl implements CardService {
     //TODO: добавить более строгую типизацию карт и проверку типов
     @Override
     public ResponseCardDTO addNewCard(RequestCardDTO cardDTO) throws IllegalArgumentException {
-        if (cardDTO == null || cardDTO.getNumber() == null || cardDTO.getPayment() == null || cardDTO.getType() == null) throw new IllegalArgumentException("There are null arguments");
         String number = cardDTO.getNumber();
-        if (!isNumberUnique(number)) throw new IllegalArgumentException("The number of the card already exists");
+        if (!isNumberUnique(number))
+            throw new IllegalArgumentException("The number of the card already exists");
+
         Card newCard = new Card();
         newCard.setNumber(number);
         newCard.setType(cardDTO.getType());
         newCard.setPayment(cardDTO.getPayment());
         newCard.setAmount(new BigDecimal("0.00"));
+
         Account ac = accountRepository.findAccountByNumber(cardDTO.getAccount()); // находим счёт, для которого создавалась карта
-        if (ac == null) throw new IllegalArgumentException("The account has not found");
+        if (ac == null)
+            throw new IllegalArgumentException("The account has not found");
+
         newCard.setAccount(ac);
-        cardRepository.save(newCard);
+        cardDAO.save(newCard);
         ResponseCardDTO responseCard = new ResponseCardDTO();
         responseCard.setID(newCard.getID());
         responseCard.setNumber(number);
@@ -48,14 +52,16 @@ public class CardServiceImpl implements CardService {
 
     private boolean isNumberUnique(String number) {
         List<Card> cards = cardRepository.findAll();
-        for (Card c : cards) if (c.getNumber().equals(number)) return false;
+        for (Card c : cards)
+            if (c.getNumber().equals(number))
+                return false;
         return true;
     }
 
     @Override
     public List<ResponseCardDTO> getCards(String account) {
         MappingUtils mappingUtils = new MappingUtils();
-         List<Card> cards = cardDAO.getList(account);
+        List<Card> cards = cardDAO.getList(account);
         return cards.stream().map(mappingUtils::mapToResponseCardDto).collect(Collectors.toList());
     }
 

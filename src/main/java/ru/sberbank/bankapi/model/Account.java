@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
@@ -13,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "ACCOUNTS")
+@Table(name = "ACCOUNTS", indexes = {@Index(name = "IDX_NUMB", columnList = "NUMB")})
 public class Account {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
@@ -22,14 +23,6 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
-
-    public Long getID() {
-        return ID;
-    }
-
-    public void setID(Long ID) {
-        this.ID = ID;
-    }
 
     @Column (name = "NUMB")
     private String number;
@@ -42,6 +35,23 @@ public class Account {
 
     @Column (name = "AMOUNT")
     private BigDecimal amount;
+
+    @Column(name = "VERSION")
+    private short version;
+
+    public short getVersion() {
+        return version;
+    }
+
+    public void setVersion(short version) {
+        this.version = version;
+    }
+
+    public Long getID() { return ID; }
+
+    public void setID(Long ID) {
+        this.ID = ID;
+    }
 
     public Set<Card> getCards() {
         return cards;
