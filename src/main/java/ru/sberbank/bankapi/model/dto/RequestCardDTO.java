@@ -1,10 +1,15 @@
 package ru.sberbank.bankapi.model.dto;
+import javax.validation.constraints.NotNull;
 
 public class RequestCardDTO {
-private String number;
-private String type;
-private String payment;
-private String account;
+    @NotNull
+    private String number;
+    @NotNull
+    private String type;
+    @NotNull
+    private String payment;
+    @NotNull
+    private String account;
 
     public String getAccount() {
         return account;
@@ -22,9 +27,7 @@ private String account;
         return payment;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
+    public void setNumber(String number) {this.number = number;}
 
     public void setType(String type) {
         this.type = type;

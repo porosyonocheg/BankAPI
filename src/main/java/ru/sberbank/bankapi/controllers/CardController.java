@@ -6,14 +6,16 @@ import org.springframework.web.bind.annotation.*;
 import ru.sberbank.bankapi.model.dto.RequestCardDTO;
 import ru.sberbank.bankapi.model.dto.ResponseCardDTO;
 import ru.sberbank.bankapi.services.CardService;
+import ru.sberbank.bankapi.utils.CheckingData;
 
 import java.util.HashMap;
 import java.util.List;
+//TODO: отделить обработку ошибок от контроллера
 
 @RestController
 @RequestMapping("/api/cards/")
 public class CardController {
-    private CardService cardService;
+    private final CardService cardService;
 
     public CardController(CardService cardService) {
         this.cardService = cardService;
@@ -21,7 +23,8 @@ public class CardController {
 
     @PostMapping(value = "new")
      public ResponseCardDTO addNewCard(@RequestBody RequestCardDTO cardDTO) {
-         return cardService.addNewCard(cardDTO);
+        CheckingData.isValid(cardDTO);
+        return cardService.addNewCard(cardDTO);
      }
 
     @GetMapping(value = "list")

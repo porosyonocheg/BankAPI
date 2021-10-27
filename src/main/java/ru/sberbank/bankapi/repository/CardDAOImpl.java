@@ -14,20 +14,21 @@ public class CardDAOImpl implements DAO<Card> {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Transactional
     public void save(Card entity) {
             em.persist(entity);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Card> getList(String accountNumber) {
-        TypedQuery<Card> q = em.createQuery("SELECT c FROM Card c WHERE c.account.number=:accountNumber", Card.class);
-        q.setParameter("accountNumber", accountNumber);
-        List<Card> cards = q.getResultList();
-        return cards;
+            TypedQuery<Card> q = em.createQuery("SELECT c FROM Card c WHERE c.account.number=:accountNumber", Card.class);
+            q.setParameter("accountNumber", accountNumber);
+            List<Card> cards = q.getResultList();
+            return cards;
     }
 
-@Transactional
-    @Override
+    @Transactional(readOnly = true)
     public Card getEntity(String cardNumber) {
             TypedQuery<Card> query = em.createQuery("SELECT '*' FROM Card WHERE number = :number",
                     Card.class);

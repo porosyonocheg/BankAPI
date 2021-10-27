@@ -9,27 +9,22 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
 import java.math.BigDecimal;
 
 /**Java Bean, представляющий сущность "Карта"*/
 @Entity
-@Table(name = "CARDS")
+@Table(name = "CARDS", uniqueConstraints =
+                                            @UniqueConstraint(columnNames={"NUMB"}))
 public class Card {
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="ACCOUNTID", referencedColumnName ="ID")
+    @JoinColumn(name="ACCOUNT_ID", referencedColumnName ="ID")
     private Account account;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
-
-    public Long getID() {
-        return ID;
-    }
-
-    public void setID(Long ID) {
-        this.ID = ID;
-    }
 
     @Column(name = "NUMB")
     private String number;
@@ -43,9 +38,22 @@ public class Card {
     @Column(name = "AMOUNT")
     private BigDecimal amount;
 
+    @Version
+    @Column(name = "VERSION")
+    private short version;
+
     public Account getAccount() { return account; }
 
     public void setAccount(Account account) {this.account = account;}
+
+
+    public Long getID() {
+        return ID;
+    }
+
+    public void setID(Long ID) {
+        this.ID = ID;
+    }
 
     public Long getAccountID() {
         return account.getID();
@@ -92,5 +100,13 @@ public class Card {
                 ", payment='" + payment + '\'' +
                 ", amount=" + amount +
                 '}';
+    }
+
+    public short getVersion() {
+        return version;
+    }
+
+    public void setVersion(short version) {
+        this.version = version;
     }
 }
