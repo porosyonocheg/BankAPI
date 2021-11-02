@@ -38,9 +38,4 @@ public class CardController {
         response.put("balance", cardService.checkBalance(number).toString());
         return response;
     }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleException(IllegalArgumentException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
 }

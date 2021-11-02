@@ -15,21 +15,30 @@ public class CardDAOImpl implements DAO<Card> {
     @PersistenceContext
     private EntityManager em;
 
+    /**Сохранение карты в базу данных*/
     @Transactional
     public void save(Card entity) {
             em.persist(entity);
     }
 
+    /**Получение списка всех карт из базы данных*/
+    @Transactional
+    public List<Card> findAll() {
+        return em.createQuery("SELECT c FROM Card c", Card.class).getResultList();
+    }
+
+    /**Получение списка всех карт для переданного номера счёта*/
     @Transactional(readOnly = true)
-    public List<Card> getList(String accountNumber) {
+    public List<Card> getListByAccountNumber(String accountNumber) {
             TypedQuery<Card> q = em.createQuery("SELECT c FROM Card c WHERE c.account.number=:accountNumber", Card.class);
             q.setParameter("accountNumber", accountNumber);
             List<Card> cards = q.getResultList();
             return cards;
     }
 
+    /**Поиск карты в базе данных по переданному номеру карты*/
     @Transactional(readOnly = true)
-    public Card getEntity(String cardNumber) {
+    public Card findByNumber(String cardNumber) {
             TypedQuery<Card> query = em.createQuery("SELECT '*' FROM Card WHERE number = :number",
                     Card.class);
             query.setMaxResults(1);
@@ -38,5 +47,11 @@ public class CardDAOImpl implements DAO<Card> {
                 return null;
             }
             return query.getSingleResult();
+    }
+
+    /**Удаление карты по номеру*/
+    @Transactional
+    public void deleteCard(String cardNumber) {
+        em.createQuery("DELETE FROM Card WHERE number = :number").setParameter("number", cardNumber);
     }
 }
