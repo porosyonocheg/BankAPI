@@ -1,4 +1,5 @@
 package ru.sberbank.bankapi.model.dto;
+
 import javax.validation.constraints.NotNull;
 
 public class RequestCardDTO {

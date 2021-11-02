@@ -6,6 +6,6 @@ import java.util.List;
 @Repository
 public interface DAO<T> {
     void save(T entity);
-    List<T> getList(String accountNumber);
-    T getEntity(String number);
+    List<T> findAll();
+    T findByNumber(String number);
 }

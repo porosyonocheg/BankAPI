@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.sberbank.bankapi.model.Card;
 import ru.sberbank.bankapi.model.dto.ResponseCardDTO;
 
+/**Формирование данных для отклика*/
 @Service
 public class MappingUtils {
 
